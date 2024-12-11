@@ -1,4 +1,4 @@
-# tertinggal-terdepan
+# PraktikumBasisData_2024_D_Tafe
 
 PraktikumBasisData
 KELAS : D
