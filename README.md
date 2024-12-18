@@ -1,4 +1,4 @@
-# PraktikumBasisData_2024_D_Tafe
+# PraktikumBasisData_2024_D_2
 ### PraktikumBasisData
 ### KELAS : D
 ### JUDUL : test
