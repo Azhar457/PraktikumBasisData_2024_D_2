@@ -3,9 +3,9 @@
 ### KELAS : D
 ### JUDUL : test
 ### Deskripsi : Database ecommerce
-Dikerjakan oleh:
-Azhar Muttaqien : 233040126 (Programmer)
-Fernanda Aminullah : 233040138 (Database Designer)
-Tegar Setyo Wiguno : 233040112 (Programmer)
-Eka Guntara : 233040168 (Database Designer)
+## Dikerjakan oleh:
+1. **Azhar Muttaqien** : 233040126 (Programmer)
+2. **Fernanda Aminullah** : 233040138 (Database Designer)
+3. **Tegar Setyo Wiguno** : 233040112 (Data Collector)
+4. **Eka Guntara** : 233040168 (Programmer)
 ###
