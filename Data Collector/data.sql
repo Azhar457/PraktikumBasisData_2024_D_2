@@ -47,3 +47,5 @@ VALUES
 ('BEBEK KALEYO EXPRESS RASUNA', 'Rasuna Garden Food Street, Jl. Epicentrum Tengah No.3', 'Kota Jakarta Selatan', 'DKI Jakarta', '12940', NULL, GETDATE()),
 
 ('BEBEK KALEYO KELAPA GADING', 'Jl. Boulevard Raya No.15-16 Blok TN', 'Kota Jakarta Utara', 'DKI Jakarta', '14240', NULL, GETDATE());
+
+-- pppppppppppppp
