@@ -1,8 +1,8 @@
 # PraktikumBasisData_2024_D_2
 ### PraktikumBasisData
 ### KELAS : D
-### JUDUL : test
-### Deskripsi : Database ecommerce
+### JUDUL : Restoran Bebek Kaleyo
+### Deskripsi : Database Revenue Restoran Bebek Kaleyo
 ## Dikerjakan oleh:
 1. **Azhar Muttaqien** : 233040126 (Programmer)
 2. **Fernanda Aminullah** : 233040138 (Database Designer)
