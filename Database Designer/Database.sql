@@ -1,4 +1,4 @@
--- Membuat Database
+-- membuat data base 
 CREATE TABLE branches (
     branch_id INT IDENTITY(1,1) PRIMARY KEY,
     branch_name VARCHAR(100) NOT NULL,
@@ -6,7 +6,6 @@ CREATE TABLE branches (
     city VARCHAR(50) NOT NULL,
     province VARCHAR(50) NOT NULL,
     postal_code VARCHAR(10),
-    phone VARCHAR(15),
     opening_date DATE
 );
 
@@ -22,11 +21,9 @@ CREATE TABLE daily_revenue (
 
 CREATE TABLE menu (
     menu_id INT IDENTITY(1,1) PRIMARY KEY,
-    branch_id INT FOREIGN KEY REFERENCES branches(branch_id),
     menu_name VARCHAR(100) NOT NULL,
     category VARCHAR(50),
-    price DECIMAL(10,2) NOT NULL,
-    is_available BIT DEFAULT 1
+    price DECIMAL(10,2) NOT NULL
 );
 
 CREATE TABLE sales (
@@ -46,4 +43,4 @@ CREATE TABLE operational_costs (
     cost_category VARCHAR(50) NOT NULL,
     amount DECIMAL(15,2) NOT NULL,
     notes TEXT
-); 
+);
