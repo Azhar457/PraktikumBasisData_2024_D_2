@@ -1,74 +1,73 @@
--- Procedure untuk menambahkan cabang baru
-CREATE PROCEDURE AddBranch
-    @BranchName VARCHAR(100),
-    @Address TEXT,
-    @City VARCHAR(50),
-    @Province VARCHAR(50),
-    @PostalCode VARCHAR(10),
-    @Phone VARCHAR(15),
-    @OpeningDate DATE
+
+-- prosedur untuk memperbarui opening_date di tabel branches
+CREATE PROCEDURE UpdateBranchOpeningDate
 AS
 BEGIN
-    INSERT INTO branches (branch_name, address, city, province, postal_code, phone, opening_date)
-    VALUES (@BranchName, @Address, @City, @Province, @PostalCode, @Phone, @OpeningDate);
+    -- Perbarui opening_date di tabel branches berdasarkan tanggal pembelian terawal di tabel sales
+    UPDATE branches
+    SET opening_date = (
+        SELECT MIN(sale_date)
+        FROM sales
+        WHERE sales.branch_id = branches.branch_id
+    )
+    WHERE EXISTS (
+        SELECT 1
+        FROM sales
+        WHERE sales.branch_id = branches.branch_id
+    );
 END;
 GO
 
--- Usage:
--- EXEC AddBranch 'Branch Name', 'Address', 'City', 'Province', 'PostalCode', 'Phone', '2023-01-01';
+-- Jalankan prosedur untuk memperbarui opening_date
+EXEC UpdateBranchOpeningDate;
 
--- Procedure untuk menambahkan revenue harian
-CREATE PROCEDURE AddDailyRevenue
-    @BranchID INT,
-    @RevenueDate DATE,
-    @TotalRevenue DECIMAL(15,2),
-    @TotalCustomers INT,
-    @PaymentMethod VARCHAR(50),
-    @Notes TEXT
+
+-- CREATE PROCEDURE UpdateTotalPrice
+CREATE PROCEDURE UpdateTotalPrice
 AS
 BEGIN
-    INSERT INTO daily_revenue (branch_id, revenue_date, total_revenue, total_customers, payment_method, notes)
-    VALUES (@BranchID, @RevenueDate, @TotalRevenue, @TotalCustomers, @PaymentMethod, @Notes);
+    UPDATE sales
+    SET total_price = m.price * s.quantity
+    FROM sales s
+    JOIN menu m ON s.menu_id = m.menu_id;
 END;
 GO
 
--- Usage:
--- EXEC AddDailyRevenue 1, '2023-01-01', 1000.00, 50, 'Cash', 'Notes';
+-- Jalankan prosedur untuk memperbarui total_price
+EXEC UpdateTotalPrice;
 
 -- Procedure untuk menambahkan menu baru
 CREATE PROCEDURE AddMenu
-    @BranchID INT,
     @MenuName VARCHAR(100),
     @Category VARCHAR(50),
-    @Price DECIMAL(10,2),
-    @IsAvailable BIT
+    @Price DECIMAL(10,2)
 AS
 BEGIN
-    INSERT INTO menu (branch_id, menu_name, category, price, is_available)
-    VALUES (@BranchID, @MenuName, @Category, @Price, @IsAvailable);
+    INSERT INTO menu ( menu_name, category, price)
+    VALUES (@MenuName, @Category, @Price);
 END;
 GO
 
 -- Usage:
 -- EXEC AddMenu 1, 'Menu Name', 'Category', 100.00, 1;
 
--- Procedure untuk menambahkan penjualan
+-- Procedure untuk menambahkan penjualan tanpa parameter total_price
 CREATE PROCEDURE AddSale
     @BranchID INT,
     @MenuID INT,
     @SaleDate DATETIME,
     @Quantity INT,
-    @TotalPrice DECIMAL(15,2),
     @PaymentMethod VARCHAR(50)
 AS
 BEGIN
-    INSERT INTO sales (branch_id, menu_id, sale_date, quantity, total_price, payment_method)
-    VALUES (@BranchID, @MenuID, @SaleDate, @Quantity, @TotalPrice, @PaymentMethod);
+    INSERT INTO sales (branch_id, menu_id, sale_date, quantity, payment_method)
+    VALUES (@BranchID, @MenuID, @SaleDate, @Quantity, @PaymentMethod);
 END;
 GO
 
 -- Usage:
--- EXEC AddSale 1, 1, '2023-01-01 12:00:00', 2, 200.00, 'Cash';
+-- EXEC AddSale 1, 1, '2023-01-01 12:00:00', 2, 'Cash';
+
 
 -- Procedure untuk menambahkan biaya operasional
 CREATE PROCEDURE AddOperationalCost
@@ -85,32 +84,4 @@ END;
 GO
 
 -- Usage:
--- EXEC AddOperationalCost 1, '2023-01-01', 'Utilities', 500.00, 'Notes';
-
--- Procedure untuk memperbarui harga menu
-CREATE PROCEDURE UpdateMenuPrice
-    @MenuID INT,
-    @NewPrice DECIMAL(10,2)
-AS
-BEGIN
-    UPDATE menu
-    SET price = @NewPrice
-    WHERE menu_id = @MenuID;
-END;
-GO
-
--- Usage:
--- EXEC UpdateMenuPrice 1, 150.00;
-
--- Procedure untuk menghapus cabang
-CREATE PROCEDURE DeleteBranch
-    @BranchID INT
-AS
-BEGIN
-    DELETE FROM branches
-    WHERE branch_id = @BranchID;
-END;
-GO
-
--- Usage:
--- EXEC DeleteBranch 1;
+-- EXEC AddOperationalCost 1, '2024-12-01', 'Utilities', 500.00, 'Notes';

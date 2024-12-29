@@ -1,54 +1,71 @@
 -- Trigger
--- Membuat tabel log untuk mencatat perubahan harga menu
-CREATE TABLE menu_price_log (
-    log_id INT IDENTITY(1,1) PRIMARY KEY,
-    menu_id INT,
-    old_price DECIMAL(10,2),
-    new_price DECIMAL(10,2),
-    change_date DATETIME DEFAULT GETDATE()
-);
-
--- Membuat trigger untuk mencatat perubahan harga menu
-DELIMITER $$
-CREATE TRIGGER log_menu_price_change 
-    BEFORE UPDATE 
-    ON menu
-    FOR EACH ROW 
+-- Membuat trigger untuk Memvalidasi total_price sebelum insert atau update pada tabel sales
+CREATE TRIGGER validate_total_price
+ON sales
+INSTEAD OF INSERT, UPDATE
+AS
 BEGIN
-    IF OLD.price <> NEW.price THEN
-        INSERT INTO menu_price_log (menu_id, old_price, new_price, change_date)
-        VALUES (OLD.menu_id, OLD.price, NEW.price, NOW());
-    END IF;
-END$$
-DELIMITER ;
+    DECLARE @menu_price DECIMAL(10,2);
+    DECLARE @menu_id INT;
+    DECLARE @quantity INT;
+    DECLARE @total_price DECIMAL(15,2);
+    DECLARE @branch_id INT;
+    DECLARE @sale_date DATETIME;
+    DECLARE @payment_method VARCHAR(50);
 
--- Membuat trigger untuk memperbarui daily_revenue setelah penjualan baru ditambahkan
-DELIMITER $$
-CREATE TRIGGER update_daily_revenue_after_sale 
-    AFTER INSERT 
-    ON sales
-    FOR EACH ROW 
-BEGIN
-    DECLARE revenue_exists INT;
-    
-    -- Cek apakah ada record untuk tanggal dan cabang yang sama di daily_revenue
-    SELECT COUNT(*) INTO revenue_exists
-    FROM daily_revenue
-    WHERE branch_id = NEW.branch_id
-    AND revenue_date = DATE(NEW.sale_date);
+    -- Ambil harga menu dari tabel menu
+    SELECT @menu_price = price
+    FROM menu
+    WHERE menu_id = (SELECT menu_id FROM inserted);
 
-    IF revenue_exists > 0 THEN
-        -- Update record yang sudah ada
-        UPDATE daily_revenue
-        SET total_revenue = total_revenue + NEW.total_price,
-            total_customers = total_customers + 1
-        WHERE branch_id = NEW.branch_id
-        AND revenue_date = DATE(NEW.sale_date);
+    -- Ambil nilai dari inserted
+    SELECT 
+        @menu_id = menu_id,
+        @quantity = quantity,
+        @branch_id = branch_id,
+        @sale_date = sale_date,
+        @payment_method = payment_method
+    FROM inserted;
+
+    -- Hitung total_price berdasarkan harga menu dan quantity
+    SET @total_price = @menu_price * @quantity;
+
+    -- Insert atau update ke tabel sales
+    IF EXISTS (SELECT 1 FROM sales WHERE sale_id = (SELECT sale_id FROM inserted))
+    BEGIN
+        UPDATE sales
+        SET 
+            menu_id = @menu_id,
+            quantity = @quantity,
+            total_price = @total_price,
+            branch_id = @branch_id,
+            sale_date = @sale_date,
+            payment_method = @payment_method
+        WHERE sale_id = (SELECT sale_id FROM inserted);
+    END
     ELSE
-        -- Insert record baru
-        INSERT INTO daily_revenue (branch_id, revenue_date, total_revenue, total_customers, payment_method, notes)
-        VALUES (NEW.branch_id, DATE(NEW.sale_date), NEW.total_price, 1, NEW.payment_method, '');
-    END IF;
-END$$
-DELIMITER ;
+    BEGIN
+        INSERT INTO sales (branch_id, menu_id, sale_date, quantity, total_price, payment_method)
+        VALUES (@branch_id, @menu_id, @sale_date, @quantity, @total_price, @payment_method);
+    END
+END;
+GO
 
+-- Usage:
+-- INSERT INTO sales (branch_id, menu_id, sale_date, quantity, payment_method)
+-- VALUES (1, 5, '2024-12-01 10:30:00', 10, 'Cash');
+
+-- membuat trigger untuk menghapus data dari tabel sales jika total_price = 0
+CREATE TRIGGER delete_sales
+ON sales
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    DELETE FROM sales
+    WHERE total_price = 0;
+END;
+GO
+
+-- Usage:
+-- INSERT INTO sales (branch_id, menu_id, sale_date, quantity, payment_method)
+-- VALUES (1, 5, '2024-12-01 10:30:00', 0, 'Cash');
