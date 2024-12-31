@@ -1,4 +1,17 @@
 -- Trigger
+-- Hapus Triger jika sudah ada
+IF EXISTS (SELECT * FROM sys.triggers WHERE name = 'validate_total_price')
+BEGIN
+    DROP TRIGGER validate_total_price;
+END
+GO
+
+IF EXISTS (SELECT * FROM sys.triggers WHERE name = 'delete_sales')
+BEGIN
+    DROP TRIGGER delete_sales;
+END
+GO
+
 -- Membuat trigger untuk Memvalidasi total_price sebelum insert atau update pada tabel sales
 CREATE TRIGGER validate_total_price
 ON sales
