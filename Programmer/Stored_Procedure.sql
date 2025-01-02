@@ -21,6 +21,11 @@ GO
 -- Jalankan prosedur untuk memperbarui opening_date
 EXEC UpdateBranchOpeningDate;
 
+IF EXISTS (SELECT * FROM sys.procedures WHERE name = 'UpdateTotalPrice')
+BEGIN
+    DROP PROCEDURE UpdateTotalPrice;
+END
+GO
 
 -- CREATE PROCEDURE UpdateTotalPrice
 CREATE PROCEDURE UpdateTotalPrice
