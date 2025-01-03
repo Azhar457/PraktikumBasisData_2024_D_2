@@ -191,8 +191,7 @@ FROM
 CREATE VIEW BranchContactInfo AS
 SELECT 
     branch_id,
-    branch_name,
-    phone
+    branch_name
 FROM 
     branches;
 -- Usage
@@ -204,8 +203,7 @@ SELECT
     menu_id,
     menu_name,
     category,
-    price,
-    is_available
+    price
 FROM 
     menu;
 -- Usage
