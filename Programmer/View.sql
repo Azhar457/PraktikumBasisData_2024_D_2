@@ -95,24 +95,22 @@ GROUP BY
 -- SELECT * FROM DailyRevenueByPaymentMethod;
 
 
--- View Untuk Menampilkan Branch Details dengan Total Revenue
-CREATE VIEW BranchDetailsWithTotalRevenue AS
+-- View Untuk Menampilkan Spesiifc Branch Sales
+CREATE VIEW SpecificBranchSales AS
 SELECT 
-    b.branch_id,
-    b.branch_name,
-    b.address,
-    b.city,
-    b.province,
-    b.postal_code,
-    b.opening_date,
-    SUM(dr.total_revenue) AS total_revenue
-FROM 
-    branches b
-    LEFT JOIN daily_revenue dr ON b.branch_id = dr.branch_id
-GROUP BY 
-    b.branch_id, b.branch_name, b.address, b.city, b.province, b.postal_code, b.opening_date;
+    s.sale_id,
+    s.branch_id,
+    s.menu_id,
+    s.sale_date,
+    s.quantity,
+    s.total_price,
+    s.payment_method
+FROM
+    sales s
+WHERE 
+    s.branch_id = 1;
 -- Usage
--- SELECT * FROM BranchDetailsWithTotalRevenue;
+-- SELECT * FROM SpecificBranchSales
 
 
 -- View Untuk Menampilkan sales details dengan menu
