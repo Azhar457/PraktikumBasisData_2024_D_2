@@ -14,7 +14,7 @@ CREATE TABLE daily_revenue (
     branch_id INT FOREIGN KEY REFERENCES branches(branch_id),
     revenue_date DATE NOT NULL,
     total_revenue DECIMAL(15,2) NOT NULL,
-    total_customers INT,
+    total_customers INT,        
     payment_method VARCHAR(50),
     notes TEXT
 );
