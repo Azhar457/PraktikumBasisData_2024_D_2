@@ -1,6 +1,6 @@
 -- VIEW
 -- View Untuk Menampilkan Total Revenue Per Branch
-CREATE VIEW TotalRevenuePerBranch AS
+CREATE OR ALTER VIEW TotalRevenuePerBranch AS
 SELECT 
     b.branch_id,
     b.branch_name,
@@ -15,7 +15,7 @@ GROUP BY
 -- SELECT * FROM TotalRevenuePerBranch;
 
 -- View Untuk Menampilkan Total Sales Per Branch
-CREATE VIEW TotalSalesPerBranch AS
+CREATE OR ALTER VIEW TotalSalesPerBranch AS
 SELECT 
     b.branch_id,
     b.branch_name,
@@ -30,22 +30,7 @@ GROUP BY
 -- SELECT * FROM TotalSalesPerBranch
 
 -- View Untuk Menampilkan Total Operational Costs Per Branch
-CREATE VIEW TotalOperationalCostsPerBranch AS
-SELECT 
-    b.branch_id,
-    b.branch_name,
-    SUM(oc.amount) AS total_operational_costs
-FROM 
-    branches b
-    JOIN operational_costs oc ON b.branch_id = oc.branch_id
-GROUP BY 
-    b.branch_id, b.branch_name;
-
--- Usage
--- SELECT * FROM TotalOperationalCostsPerBranch;
-
--- View Untuk Menampilkan Total operational Per Branch
-CREATE VIEW TotalOperationalCostsPerBranch AS
+CREATE OR ALTER VIEW TotalOperationalCostsPerBranch AS
 SELECT 
     b.branch_id,
     b.branch_name,
@@ -61,7 +46,7 @@ GROUP BY
 
 
 -- View Untuk Menampilkan Daily Sales Per Branch
-CREATE VIEW DailySalesPerBranch AS
+CREATE OR ALTER VIEW DailySalesPerBranch AS
 SELECT 
     b.branch_id,
     b.branch_name,
@@ -78,7 +63,7 @@ GROUP BY
 
 
 -- View Untuk Menampilkan Daily Revenue Per Branch per Payment Method
-CREATE VIEW DailyRevenueByPaymentMethod AS
+CREATE OR ALTER VIEW DailyRevenueByPaymentMethod AS
 SELECT 
     b.branch_id,
     b.branch_name,
@@ -96,7 +81,7 @@ GROUP BY
 
 
 -- View Untuk Menampilkan Spesiifc Branch Sales
-CREATE VIEW SpecificBranchSales AS
+CREATE OR ALTER VIEW SpecificBranchSales AS
 SELECT 
     s.sale_id,
     s.branch_id,
@@ -114,7 +99,7 @@ WHERE
 
 
 -- View Untuk Menampilkan sales details dengan menu
-CREATE VIEW SalesDetailsWithMenu AS
+CREATE OR ALTER VIEW SalesDetailsWithMenu AS
 SELECT 
     s.sale_id,
     s.branch_id,
@@ -133,7 +118,7 @@ FROM
 
 
 -- View Untuk Menampilkan operational costs details dengan branch
-CREATE VIEW OperationalCostsWithBranch AS
+CREATE OR ALTER VIEW OperationalCostsWithBranch AS
 SELECT 
     oc.cost_id,
     oc.branch_id,
@@ -149,7 +134,7 @@ FROM
 -- SELECT * FROM OperationalCostsWithBranch;
 
 -- View Untuk Menampilkan daily revenue details dengan branch
-CREATE VIEW DailyRevenueWithBranch AS
+CREATE OR ALTER VIEW DailyRevenueWithBranch AS
 SELECT 
     dr.revenue_id,
     dr.branch_id,
@@ -166,7 +151,7 @@ FROM
 -- SELECT * FROM DailyRevenueWithBranch
 
 -- View Untuk Menampilkan sales details dengan branch dan menu
-CREATE VIEW SalesWithBranchAndMenu AS
+CREATE OR ALTER VIEW SalesWithBranchAndMenu AS
 SELECT 
     s.sale_id,
     s.branch_id,
@@ -186,7 +171,7 @@ FROM
 -- SELECT * FROM SalesWithBranchAndMenu;
 
 -- View untuk bracnh contact info
-CREATE VIEW BranchContactInfo AS
+CREATE OR ALTER VIEW BranchContactInfo AS
 SELECT 
     branch_id,
     branch_name
@@ -196,7 +181,7 @@ FROM
 -- SELECT * FROM BranchContactInfo;
 
 -- View untuk menu details
-CREATE VIEW MenuDetails AS
+CREATE OR ALTER VIEW MenuDetails AS
 SELECT 
     menu_id,
     menu_name,
@@ -209,7 +194,7 @@ FROM
 
 
 -- view untuk sales terbaru
-CREATE VIEW RecentSales AS
+CREATE OR ALTER VIEW RecentSales AS
 SELECT 
     sale_id,
     branch_id,
@@ -226,7 +211,7 @@ WHERE
 -- SELECT * FROM RecentSales;
 
 -- view untuk high revenue days
-CREATE VIEW HighRevenueDays AS
+CREATE OR ALTER VIEW HighRevenueDays AS
 SELECT 
     branch_id,
     revenue_date,
@@ -242,7 +227,7 @@ WHERE
 -- SELECT * FROM HighRevenueDays;
 
 -- view untuk operational costs summary
-CREATE VIEW OperationalCostsSummary AS
+CREATE OR ALTER VIEW OperationalCostsSummary AS
 SELECT 
     branch_id,
     cost_category,
@@ -252,4 +237,6 @@ FROM
 GROUP BY 
     branch_id, cost_category;
 -- Usage
--- SELECT * FROM OperationalCostsSummary;
+SELECT * FROM OperationalCostsSummary;
+
+USE Revenue_Bebek_Kaleyo

@@ -13,7 +13,7 @@ END
 GO
 
 -- Membuat trigger untuk Memvalidasi total_price sebelum insert atau update pada tabel sales
-CREATE TRIGGER validate_total_price
+CREATE OR ALTER TRIGGER validate_total_price
 ON sales
 INSTEAD OF INSERT, UPDATE
 AS
@@ -69,7 +69,7 @@ GO
 -- VALUES (1, 5, '2024-12-01 10:30:00', 10, 'Cash');
 
 -- membuat trigger untuk menghapus data dari tabel sales jika total_price = 0
-CREATE TRIGGER delete_sales
+CREATE OR ALTER TRIGGER delete_sales
 ON sales
 AFTER INSERT, UPDATE
 AS
