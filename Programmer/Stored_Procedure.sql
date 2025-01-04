@@ -54,7 +54,7 @@ END;
 GO
 
 -- Usage:
--- EXEC AddMenu 1, 'Menu Name', 'Category', 100.00, 1;
+-- EXEC AddMenu 'Menu Name', 'Category', 100.00;
 
 -- Procedure untuk menambahkan penjualan tanpa parameter total_price
 CREATE PROCEDURE AddSale
