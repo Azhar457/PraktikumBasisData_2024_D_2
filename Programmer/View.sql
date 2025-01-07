@@ -95,7 +95,7 @@ FROM
 WHERE 
     s.branch_id = 1;
 -- Usage
--- SELECT * FROM SpecificBranchSales
+-- SELECT * FROM SpecificBranchSales;
 
 
 -- View Untuk Menampilkan sales details dengan menu
